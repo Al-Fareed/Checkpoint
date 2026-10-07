@@ -1,0 +1,938 @@
+﻿DEVFLOW
+End-to-End React + Java Full-Stack Development Roadmap
+A guided implementation specification for learning React deeply while building a production-style project.
+Project Definition
+DevFlow is a Jira/GitHub-Projects-style project management platform. Users can authenticate, create projects, manage teams, create and assign tasks, use a Kanban board, comment on work, receive notifications, search/filter data, view analytics, and operate according to roles and permissions.
+Primary stack: React + TypeScript + Vite + Tailwind CSS + React Router + Redux Toolkit + TanStack Query + React Hook Form + Zod + Playwright/Vitest/React Testing Library + Java + Spring Boot + Spring Security + JPA/Hibernate + PostgreSQL + Docker + CI/CD.
+How to Use This Roadmap
+* Build in milestone order. Do not add advanced libraries before the roadmap asks for them.
+* For every task, follow the explicit 'Must use / learn' requirement. The goal is deliberate React practice, not just feature completion.
+* Use local component state for temporary UI/form state, Redux for cross-feature client/application state, and TanStack Query for server state/cache.
+* Do not force hooks into the application. Each hook must solve a real problem described by the task.
+* After each milestone, manually verify the feature and add/update tests where the milestone specifies them.
+* Only call the project complete after the final optimization, security, accessibility, testing, deployment, and documentation milestones are finished.
+State Ownership Rules
+ToolStoreExamplesDo NOT use it foruseStateComponent/localInputs, modal open state, tabs, local UI filtersGlobal user/project/task stateuseReducerComplex local stateMulti-step/complex forms, state machinesSimple single-value stateContextShared dependency/stateTheme, auth helpers, localeEvery piece of application dataRedux ToolkitGlobal client/application stateAuth session metadata, UI preferences, notificationsDuplicating server cacheTanStack QueryServer state/cacheProjects, tasks, comments, users from APIsPure UI stateuseRefMutable value / DOM refFocus, timers, previous values, DOM nodesRendering stateuseMemoDerived valueExpensive filtering/sorting/statisticsEvery calculation by defaultuseCallbackStable function referenceCallbacks passed to memoized childrenEvery function by defaultMilestone 0 - Product Scope, Architecture & Engineering Setup
+Objective: Define a maintainable application before feature work begins.
+0.1 - Define product requirements
+Goal: Write the core user journeys and acceptance criteria.
+Implement:
+* Document roles: ADMIN, MANAGER, DEVELOPER, VIEWER.
+* Document project/task lifecycle and permissions.
+* Define MVP versus later enhancements.
+Must use / learn: Requirements/acceptance criteria
+Done when: A written scope exists and each major feature has a user-visible outcome.
+0.2 - Initialize frontend
+Goal: Create the React application foundation.
+Implement:
+* Create React + TypeScript + Vite app.
+* Install/configure Tailwind CSS.
+* Configure ESLint and formatting.
+* Create environment variable strategy.
+Must use / learn: TypeScript, Vite, Tailwind, ESLint
+Done when: The app starts cleanly and lint/build commands work.
+0.3 - Define frontend architecture
+Goal: Create feature-oriented folders and shared infrastructure.
+Implement:
+* Create components, features, pages, layouts, hooks, services, store, types, utils, routes folders.
+* Define naming conventions.
+* Define API/service boundary.
+Must use / learn: TypeScript modules, Component composition
+Done when: A new developer can locate a feature, component, hook, API service, and type.
+0.4 - Initialize backend
+Goal: Create Spring Boot service and database connectivity.
+Implement:
+* Create Spring Boot application.
+* Add Web, Validation, Security, JPA/Hibernate and PostgreSQL dependencies.
+* Create profiles for local/test/prod.
+Must use / learn: Spring Boot, Maven/Gradle, PostgreSQL
+Done when: Backend starts and can connect to the development database.
+0.5 - Repository and quality gates
+Goal: Create a baseline engineering workflow.
+Implement:
+* Git repository.
+* README.
+* Branch/commit conventions.
+* Frontend lint/typecheck/build scripts.
+* Backend test/build scripts.
+Must use / learn: Git, CI-friendly scripts
+Done when: A clean checkout can install, lint, test, build, and run the application.
+Milestone 1 - Application Shell, Routing & Reusable UI
+Objective: Build the navigation and component foundation used by every feature.
+1.1 - Create application layout
+Goal: Build Navbar, Sidebar and main content shell.
+Implement:
+* Responsive desktop/mobile layout.
+* Reusable Button, Input, Card, Modal, Badge, Spinner/Skeleton, EmptyState and ErrorState components.
+Must use / learn: Props, children, composition, conditional rendering
+State/data ownership: Local UI state for menus/modals.
+Done when: All pages render inside a consistent shell.
+1.2 - Configure routing
+Goal: Create public and private route structure.
+Implement:
+* /login, /register, /forgot-password, /dashboard, /projects, /projects/:id, /tasks/:taskId, /team, /profile, /settings.
+* Add 404 route.
+Must use / learn: React Router, Link/NavLink, useLocation, useParams
+Done when: Browser navigation and deep links work.
+1.3 - Navigation behavior
+Goal: Make Sidebar/Navbar route-aware.
+Implement:
+* Active navigation state.
+* Mobile sidebar open/close.
+* Profile menu and logout placeholder.
+Must use / learn: useLocation, useState
+State/data ownership: Sidebar/menu state remains local.
+Done when: Navigation state behaves correctly without global state.
+1.4 - Accessibility foundation
+Goal: Make shared components keyboard and screen-reader friendly.
+Implement:
+* Semantic buttons/links.
+* Labels for inputs.
+* Visible focus states.
+* Keyboard-operable modal/dropdown basics.
+* ARIA only where needed.
+Must use / learn: Semantic HTML, ARIA basics
+Done when: Core shared controls can be operated without a mouse.
+Milestone 2 - Authentication UI & Client Session
+Objective: Build authentication screens and establish the local/global state boundary.
+2.1 - Login form
+Goal: Build controlled email/password form.
+Implement:
+* Email and password inputs.
+* Show/hide password.
+* Submit/loading/error states.
+* Remember-me UI if included.
+Must use / learn: useState, controlled components, event handling
+State/data ownership: email/password/errors/loading stay local.
+Done when: Inputs update correctly and validation/errors are visible.
+2.2 - Registration form
+Goal: Build a controlled registration form.
+Implement:
+* Name, email, password, confirm password.
+* Password strength feedback.
+* Client-side validation.
+* Server error display placeholder.
+Must use / learn: useState, conditional rendering
+State/data ownership: Form fields/errors local.
+Done when: Invalid submissions are blocked and valid input can be submitted.
+2.3 - Forgot password UI
+Goal: Build email-based reset request UI.
+Implement:
+* Email validation.
+* Success/error/idle states.
+Must use / learn: useState
+State/data ownership: Form state local.
+Done when: Each state has clear user feedback.
+2.4 - Authentication context
+Goal: Create a small authentication abstraction.
+Implement:
+* AuthProvider.
+* useAuth custom hook.
+* Current user and auth helper methods.
+* Avoid prop drilling.
+Must use / learn: createContext, useContext, custom hook
+State/data ownership: Context exposes auth dependency; form inputs remain local.
+Done when: Navbar and protected routing can consume auth state without prop drilling.
+2.5 - Protected routes
+Goal: Prevent unauthenticated access to private pages.
+Implement:
+* Redirect unauthenticated users to login.
+* Handle loading/unknown session state.
+Must use / learn: useAuth, Navigate, conditional rendering
+State/data ownership: Auth/session state shared.
+Done when: Private routes cannot be accessed without a valid session.
+Milestone 3 - Dashboard with Mock Data
+Objective: Build a useful dashboard before connecting APIs.
+3.1 - Dashboard statistics
+Goal: Create KPI cards for projects and tasks.
+Implement:
+* Total projects, active projects, open tasks, completed tasks.
+* Reusable KPI card.
+Must use / learn: props, array methods
+State/data ownership: Mock data local/module-level initially.
+Done when: Cards render correctly from data rather than hard-coded markup.
+3.2 - Derived statistics
+Goal: Calculate completion percentage and other derived metrics.
+Implement:
+* Compute percentages from task data.
+* Handle zero-task edge case.
+Must use / learn: useMemo
+State/data ownership: Derived values should not be separately stored.
+Done when: Changing source data changes calculated metrics correctly.
+3.3 - Recent activity
+Goal: Render activity feed.
+Implement:
+* ActivityItem component.
+* Timestamp formatting.
+* Empty state.
+Must use / learn: map, keys, conditional rendering
+Done when: Feed renders from an array and handles empty data.
+3.4 - Dashboard loading/error/empty states
+Goal: Create realistic state transitions even with mock data.
+Implement:
+* Skeletons.
+* Error state with retry action.
+* Empty project/task state.
+Must use / learn: useState, conditional rendering
+State/data ownership: Transient UI state local.
+Done when: Each major dashboard section has loading, success, error, and empty behavior where applicable.
+Milestone 4 - Project Management
+Objective: Create a complete project lifecycle using local state first, then prepare it for global/server state.
+4.1 - Project list
+Goal: Render project cards/table.
+Implement:
+* Search, status filter, sorting, empty state, pagination UI.
+Must use / learn: useState, useMemo
+State/data ownership: search/filter/sort/page UI state local; project data later moves to server state.
+Done when: Project list responds correctly to all controls.
+4.2 - Project details
+Goal: Build project overview page.
+Implement:
+* Project metadata, owner, members, progress, task summary, activity.
+Must use / learn: useParams, props, composition
+State/data ownership: Selected project identity comes from URL; server data later from Query.
+Done when: Project detail route resolves the correct project.
+4.3 - Create project modal
+Goal: Build project creation form.
+Implement:
+* Name, description, dates, lead.
+* Validation.
+* Cancel/reset behavior.
+Must use / learn: useState, useRef
+State/data ownership: Form values and modal state local.
+Done when: Modal can open, validate, submit, reset and close predictably.
+4.4 - Edit/delete project
+Goal: Add lifecycle controls.
+Implement:
+* Edit form.
+* Delete confirmation.
+* Success/error feedback.
+Must use / learn: useState, conditional rendering
+State/data ownership: Dialog/form state local.
+Done when: Destructive actions require confirmation.
+Milestone 5 - Task Management
+Objective: Build the core work-item system with realistic forms and derived filtering.
+5.1 - Task list
+Goal: Display tasks with status, priority, assignee, due date and labels.
+Implement:
+* Search, filter, sort, pagination.
+* Reusable TaskCard/TaskRow.
+Must use / learn: useState, useMemo
+State/data ownership: UI filters local; task collection eventually server state.
+Done when: Task list handles large-ish mock data correctly.
+5.2 - Task creation form
+Goal: Create a controlled task form.
+Implement:
+* Title, description, assignee, priority, status, due date, labels.
+* Validation and errors.
+* Reset after successful creation.
+Must use / learn: useState, event handling
+State/data ownership: Form state local.
+Done when: All fields are controlled and validated.
+5.3 - Task details route
+Goal: Create task detail page.
+Implement:
+* Use /tasks/:taskId.
+* Display full task details.
+* Edit controls.
+Must use / learn: useParams
+State/data ownership: Route identity from URL.
+Done when: Refreshing the URL still identifies the task.
+5.4 - Task filtering pipeline
+Goal: Create a predictable filtering/sorting pipeline.
+Implement:
+* Filter by status/priority/assignee/date.
+* Sort by due date/priority/created date.
+Must use / learn: useMemo
+State/data ownership: Only source tasks + filter criteria are stored; filtered result is derived.
+Done when: Filter combinations produce correct results.
+Milestone 6 - Kanban Board & Interaction
+Objective: Build the central interactive workflow and learn event handling, refs and performance patterns.
+6.1 - Kanban structure
+Goal: Create TODO, IN_PROGRESS, REVIEW and DONE columns.
+Implement:
+* KanbanBoard, KanbanColumn, TaskCard components.
+* Task count per column.
+Must use / learn: component composition, map, keys
+Done when: Tasks appear in the correct column based on status.
+6.2 - Drag and drop
+Goal: Move tasks between columns.
+Implement:
+* Drag start/end/drop handling.
+* Visual drop target.
+* Keyboard-accessible alternative action.
+Must use / learn: drag/drop API or chosen DnD library, useState
+State/data ownership: Transient drag UI local.
+Done when: A task can be moved between valid statuses.
+6.3 - Persist status changes
+Goal: Update the task status after drop.
+Implement:
+* Dispatch/update service call placeholder.
+* Prevent duplicate updates.
+* Handle failure.
+Must use / learn: useCallback, dispatch
+State/data ownership: Task status is application/server state; drag visual state local.
+Done when: UI and data stay synchronized after movement.
+6.4 - Optimize task cards
+Goal: Prevent unnecessary task-card renders.
+Implement:
+* Memoize TaskCard.
+* Stabilize callbacks passed to cards.
+* Measure before/after with React DevTools.
+Must use / learn: React.memo, useCallback, React DevTools Profiler
+Done when: Optimization is evidence-based, not added blindly.
+Milestone 7 - Comments, Activity & Collaboration
+Objective: Add collaboration around tasks.
+7.1 - Comments
+Goal: Add/view/edit/delete comments.
+Implement:
+* Controlled comment input.
+* Optimistic-feeling UI.
+* Edit mode and cancel.
+Must use / learn: useState, useRef
+State/data ownership: Draft comment/edit text local; saved comments server state.
+Done when: Comments can be created and edited with validation.
+7.2 - Activity timeline
+Goal: Record/render task events.
+Implement:
+* Creation, assignment, status change, priority change, comment events.
+Must use / learn: array rendering, date formatting
+State/data ownership: Activity data server state.
+Done when: Timeline is chronological and readable.
+7.3 - Mentions
+Goal: Support @mentions in comments.
+Implement:
+* Autocomplete candidate users.
+* Insert mention.
+* Display mention styling.
+Must use / learn: useState, useMemo, useRef
+State/data ownership: Draft and suggestion UI local.
+Done when: Mention selection works without disrupting normal typing.
+Milestone 8 - Team, Roles & Permissions
+Objective: Implement team membership and authorization-aware UI.
+8.1 - Team list
+Goal: Render members with roles/status.
+Implement:
+* Search/filter members.
+* Member detail.
+Must use / learn: useState, useMemo
+State/data ownership: Search/filter local; members server state.
+Done when: Member list handles empty/loading/error states.
+8.2 - Invite member
+Goal: Build invitation form.
+Implement:
+* Email + role.
+* Validation.
+* Pending invitation state.
+Must use / learn: useState
+State/data ownership: Form state local.
+Done when: Invitation can be submitted and feedback displayed.
+8.3 - Permission model
+Goal: Define permission matrix.
+Implement:
+* Map role → permissions.
+* Centralize permission constants/types.
+Must use / learn: TypeScript, custom hook
+State/data ownership: Permissions derived from authenticated user role.
+Done when: There is one source of truth for UI permission checks.
+8.4 - usePermission hook
+Goal: Create reusable authorization helper.
+Implement:
+* can(action, resource) or focused helpers such as canDeleteProject().
+* Use it throughout UI.
+Must use / learn: custom hook, useSelector/useAuth
+State/data ownership: Role comes from global auth state; permission result is derived.
+Done when: Unauthorized controls are hidden/disabled consistently.
+Milestone 9 - Redux Toolkit - Client/Application State
+Objective: Introduce Redux only where global client state is justified.
+9.1 - Configure Redux store
+Goal: Create store and Provider.
+Implement:
+* configureStore.
+* Typed RootState/Dispatch hooks.
+Must use / learn: Redux Toolkit, TypeScript
+Done when: Components can access a typed Redux store.
+9.2 - Auth slice
+Goal: Store authenticated user/session metadata.
+Implement:
+* user, token/session metadata, isAuthenticated.
+* login/setCredentials/logout reducers.
+Must use / learn: createSlice, useSelector, useDispatch
+State/data ownership: Global authentication state; form values remain local.
+Done when: Refreshing/reloading behavior is defined and tested.
+9.3 - UI slice
+Goal: Store genuinely global UI preferences.
+Implement:
+* Theme, sidebar preference, global modal/command-palette state only if justified.
+Must use / learn: createSlice
+State/data ownership: Global UI state only.
+Done when: Global UI preferences survive component remounts.
+9.4 - Notification slice
+Goal: Store global notification/read state if not entirely server-cache driven.
+Implement:
+* notifications, unread count, mark read/all read.
+Must use / learn: createSlice, selectors
+State/data ownership: Global cross-page notification state.
+Done when: Notification badge and panel remain synchronized.
+9.5 - Selectors
+Goal: Create reusable selectors.
+Implement:
+* selectCurrentUser, selectUnreadCount, permission-related selectors.
+Must use / learn: selectors, TypeScript
+State/data ownership: Derived Redux data should be selected/derived, not redundantly stored.
+Done when: Components avoid reaching deeply into store shape.
+Milestone 10 - Spring Boot Domain Model & REST API
+Objective: Replace mock data with a real backend.
+10.1 - Database schema
+Goal: Model users, projects, tasks, comments, teams, memberships, notifications, activity logs.
+Implement:
+* Define keys/relationships/index candidates.
+* Use migrations rather than manual production schema edits.
+Must use / learn: JPA/Hibernate, PostgreSQL, DB migrations
+State/data ownership: Persistent data belongs in DB.
+Done when: Schema supports all core workflows.
+10.2 - Entity/repository layer
+Goal: Create JPA entities and repositories.
+Implement:
+* Avoid exposing entities directly when DTOs are appropriate.
+* Add repository query methods.
+Must use / learn: Spring Data JPA, Hibernate
+Done when: Repositories cover required persistence operations.
+10.3 - DTO/service/controller architecture
+Goal: Create clean API boundaries.
+Implement:
+* Request DTOs, response DTOs, services, controllers.
+* Centralized validation.
+Must use / learn: Spring Web, Bean Validation
+Done when: Controllers remain thin and business rules live in services.
+10.4 - Project APIs
+Goal: Implement CRUD and project task/member operations.
+Implement:
+* GET/POST/PUT/PATCH/DELETE as appropriate.
+* Pagination/filter/sort query parameters.
+Must use / learn: REST, HTTP status codes
+Done when: Project workflows work through HTTP.
+10.5 - Task APIs
+Goal: Implement task CRUD, assignment, status changes, comments.
+Implement:
+* Validate ownership/permissions server-side.
+* Support filtering/sorting/pagination.
+Must use / learn: REST, validation
+Done when: Task workflows work through HTTP and reject invalid input.
+Milestone 11 - Spring Security, JWT & Authorization
+Objective: Secure the full application; never rely only on frontend permissions.
+11.1 - Password security
+Goal: Hash passwords securely and never return them.
+Implement:
+* Registration validation.
+* Login credential verification.
+Must use / learn: Spring Security, PasswordEncoder
+Done when: Passwords are never stored or logged in plaintext.
+11.2 - JWT/session strategy
+Goal: Implement chosen authentication strategy.
+Implement:
+* Token generation/validation.
+* Expiration.
+* Refresh strategy if applicable.
+* Secure transport/storage decisions.
+Must use / learn: Spring Security
+State/data ownership: Auth credential is security-sensitive; never store secrets in source control.
+Done when: Expired/invalid credentials are rejected.
+11.3 - Authentication filter
+Goal: Authenticate protected API requests.
+Implement:
+* Populate security context.
+* Return correct 401 behavior.
+Must use / learn: Security filter chain
+Done when: Protected APIs reject unauthenticated requests.
+11.4 - Role/permission authorization
+Goal: Enforce permissions on backend endpoints.
+Implement:
+* ADMIN/MANAGER/DEVELOPER/VIEWER rules.
+* 403 for authenticated but unauthorized users.
+Must use / learn: Spring Security authorization
+State/data ownership: Authorization is enforced server-side.
+Done when: Changing frontend code cannot bypass permissions.
+11.5 - CORS/CSRF/security headers
+Goal: Configure production-appropriate browser security.
+Implement:
+* CORS allowlist.
+* Security headers.
+* CSRF strategy appropriate to auth mechanism.
+Must use / learn: Spring Security
+Done when: Security configuration is explicit and environment-aware.
+Milestone 12 - Frontend API Layer & TanStack Query
+Objective: Connect React to the backend and establish a clean server-state architecture.
+12.1 - HTTP client/service layer
+Goal: Create typed API functions.
+Implement:
+* Centralize base URL.
+* Request/response types.
+* Normalize API errors.
+* Auth handling/interceptors where appropriate.
+Must use / learn: TypeScript, fetch/axios
+Done when: Components do not construct raw URLs everywhere.
+12.2 - Projects with useQuery
+Goal: Fetch and cache projects.
+Implement:
+* Loading/error/data states.
+* Query keys.
+* Refetch/invalidation strategy.
+Must use / learn: TanStack Query useQuery
+State/data ownership: Server state/cache belongs to Query.
+Done when: Project pages remain correct after navigation/remount.
+12.3 - Mutations
+Goal: Create/update/delete projects and tasks.
+Implement:
+* useMutation.
+* Invalidate or update relevant queries.
+* Disable duplicate submissions.
+Must use / learn: useMutation
+State/data ownership: Mutation status local to mutation/query cache.
+Done when: UI updates after successful mutation without manual duplication.
+12.4 - Optimistic updates
+Goal: Optimistically move a Kanban task.
+Implement:
+* Cancel query.
+* Snapshot previous data.
+* Update cache.
+* Rollback on error.
+* Invalidate after settlement.
+Must use / learn: TanStack Query mutation lifecycle
+State/data ownership: Temporary optimistic state lives in query cache.
+Done when: A failed move visibly rolls back correctly.
+12.5 - Server-side pagination/filtering
+Goal: Move large-list filtering to the API.
+Implement:
+* Query parameters.
+* Stable query keys.
+* Pagination controls.
+Must use / learn: useQuery, URLSearchParams
+State/data ownership: Filter state can be local/URL state; results are server state.
+Done when: Changing filters requests the correct server dataset.
+Milestone 13 - URL State, Search & Advanced Navigation
+Objective: Make the app deep-linkable and shareable.
+13.1 - URL-backed filters
+Goal: Persist project/task filters in query params.
+Implement:
+* status, priority, assignee, page, sort.
+Must use / learn: useSearchParams
+State/data ownership: URL is source of truth for shareable filters.
+Done when: Copying a filtered URL reproduces the same view.
+13.2 - Global search
+Goal: Search projects/tasks/users.
+Implement:
+* Debounce input.
+* Suggestions/results.
+* Keyboard navigation.
+* Empty state.
+Must use / learn: useState, useEffect, useDebounce, useRef
+State/data ownership: Draft search local; URL/server results as appropriate.
+Done when: Search does not issue a request per keystroke.
+13.3 - Navigation patterns
+Goal: Add breadcrumbs and back behavior.
+Implement:
+* Use route hierarchy.
+* Preserve useful filters on navigation.
+Must use / learn: React Router
+Done when: Users can understand and move through hierarchy.
+Milestone 14 - Forms, Validation & Error UX
+Objective: Standardize all forms and user-facing errors.
+14.1 - Adopt React Hook Form
+Goal: Replace verbose form state where appropriate.
+Implement:
+* Register fields.
+* handleSubmit.
+* FormProvider where nested forms benefit.
+Must use / learn: React Hook Form
+State/data ownership: RHF owns form state; do not duplicate every field in Redux.
+Done when: Forms remain controlled/validated without unnecessary state plumbing.
+14.2 - Schema validation
+Goal: Add Zod schemas shared where practical with TypeScript types.
+Implement:
+* Login/register/project/task/invite/profile schemas.
+* Map server validation errors.
+Must use / learn: Zod, resolver
+State/data ownership: Validation errors local to form.
+Done when: Client and server validation errors are clearly displayed.
+14.3 - Form UX
+Goal: Add dirty-state, reset, disabled submit, success/error feedback.
+Implement:
+* Prevent accidental duplicate submit.
+* Unsaved-change warning where appropriate.
+Must use / learn: formState, useEffect
+State/data ownership: Transient form state local.
+Done when: Users receive clear feedback for every submit outcome.
+Milestone 15 - Notifications & Real-Time Collaboration
+Objective: Move from static notifications to a production-style collaboration experience.
+15.1 - Notification center
+Goal: Display unread/read notifications.
+Implement:
+* Dropdown/page.
+* Mark read/all read.
+* Link notification to relevant entity.
+Must use / learn: useQuery/useMutation or Redux where justified
+State/data ownership: Notifications are server state; unread UI can be derived.
+Done when: Notification actions update consistently.
+15.2 - Real-time transport
+Goal: Add WebSocket/STOMP or equivalent if justified.
+Implement:
+* Connect/disconnect.
+* Reconnect/backoff.
+* Handle auth.
+* Update query cache or store on events.
+Must use / learn: WebSocket/STOMP, useEffect, cleanup
+State/data ownership: Connection lifecycle local hook; received server state goes to cache/store.
+Done when: New events appear without manual refresh.
+15.3 - Connection/error states
+Goal: Make real-time failure non-destructive.
+Implement:
+* Offline/reconnecting indicator.
+* Fallback to polling/refetch.
+Must use / learn: useEffect cleanup, conditional rendering
+Done when: Temporary connection failure does not break the app.
+Milestone 16 - Theme, Accessibility & Responsive UX
+Objective: Make the product usable, not merely functional.
+16.1 - Dark/light theme
+Goal: Implement theme switching.
+Implement:
+* Theme tokens/classes.
+* Persist preference.
+Must use / learn: Context or Redux, localStorage
+State/data ownership: Theme preference is global; current toggle is UI state.
+Done when: Theme persists across reloads.
+16.2 - Responsive layouts
+Goal: Support desktop/tablet/mobile.
+Implement:
+* Kanban horizontal scrolling/mobile alternative.
+* Responsive tables/cards.
+* Mobile navigation.
+Must use / learn: Tailwind responsive utilities
+Done when: Core workflows remain usable at mobile widths.
+16.3 - Accessibility audit
+Goal: Audit keyboard, focus, labels, contrast and semantics.
+Implement:
+* Focus trap for modal if library/custom implementation requires it.
+* Escape behavior.
+* Accessible errors/live regions.
+* Reduced-motion consideration.
+Must use / learn: ARIA, keyboard events, focus management
+Done when: Core flows are keyboard accessible and major violations are addressed.
+Milestone 17 - Error Handling, Resilience & Observability
+Objective: Design failure states deliberately.
+17.1 - React error boundaries
+Goal: Prevent one rendering failure from taking down the whole app.
+Implement:
+* Route-level/global error boundary.
+* Fallback with retry/navigation.
+Must use / learn: Error Boundary, component lifecycle
+Done when: Unexpected render errors produce a useful fallback.
+17.2 - API error normalization
+Goal: Standardize client handling of 400/401/403/404/409/422/500/network failures.
+Implement:
+* Map errors to useful messages.
+* Handle session expiry.
+Must use / learn: HTTP status handling, Query error states
+Done when: Users get actionable messages rather than raw server errors.
+17.3 - Backend global exception handling
+Goal: Create consistent API error response.
+Implement:
+* Correlation/request ID.
+* Validation error format.
+* No stack traces in production responses.
+Must use / learn: Spring @ControllerAdvice
+Done when: Frontend can reliably parse API failures.
+17.4 - Logging/monitoring hooks
+Goal: Add structured logs and production monitoring strategy.
+Implement:
+* Do not log secrets/passwords/tokens.
+* Capture useful frontend/backend failures.
+Must use / learn: structured logging
+Done when: Production failures can be investigated without exposing sensitive data.
+Milestone 18 - Testing - Unit, Component, Integration & E2E
+Objective: Build confidence in behavior, not just code coverage.
+18.1 - Unit tests
+Goal: Test pure utilities, reducers, selectors and validation.
+Implement:
+* Date/formatting utilities.
+* Permission rules.
+* Redux reducers/selectors.
+Must use / learn: Vitest
+Done when: Core pure logic has focused unit coverage.
+18.2 - Component tests
+Goal: Test user-visible behavior.
+Implement:
+* Login, forms, modal, task card, filters, permission-based UI.
+Must use / learn: React Testing Library, user-event
+Done when: Tests interact through accessible/user-facing behavior.
+18.3 - API/integration tests
+Goal: Test Spring Boot endpoints and security rules.
+Implement:
+* CRUD.
+* Validation.
+* 401/403.
+* Database integration strategy.
+Must use / learn: Spring Boot Test, MockMvc/Testcontainers where appropriate
+Done when: Critical backend workflows are covered.
+18.4 - E2E tests
+Goal: Test complete user journeys.
+Implement:
+* Login → dashboard → project → task → Kanban → comment → logout.
+* Role-based access journey.
+* Failure path.
+Must use / learn: Playwright
+Done when: Critical journeys run from a clean environment.
+18.5 - Test data strategy
+Goal: Create deterministic fixtures/factories.
+Implement:
+* Avoid test-order dependency.
+* Seed/reset test data safely.
+Must use / learn: test factories, fixtures
+Done when: Tests are repeatable locally and in CI.
+Milestone 19 - Performance Optimization & Profiling
+Objective: Optimize the completed application based on evidence.
+19.1 - Measure baseline
+Goal: Profile before changing code.
+Implement:
+* React DevTools Profiler.
+* Browser Performance panel.
+* Lighthouse.
+* Bundle analysis.
+Must use / learn: React Profiler, Lighthouse
+Done when: A baseline exists for load/render/bundle metrics.
+19.2 - Render optimization
+Goal: Fix avoidable rerenders.
+Implement:
+* React.memo where beneficial.
+* useCallback/useMemo only where measured.
+* Stable props.
+* Selector optimization.
+Must use / learn: React.memo, useMemo, useCallback
+Done when: Hot paths show measurable improvement.
+19.3 - Code splitting
+Goal: Lazy-load route-level bundles.
+Implement:
+* React.lazy/Suspense.
+* Analyze chunk sizes.
+Must use / learn: lazy, Suspense
+Done when: Initial bundle is reduced without broken navigation.
+19.4 - Network optimization
+Goal: Reduce API overhead.
+Implement:
+* Pagination.
+* Caching.
+* Request deduplication.
+* Prefetch likely next data.
+* Avoid waterfalls.
+Must use / learn: TanStack Query, HTTP caching concepts
+Done when: Important screens load with fewer/parallel requests where reasonable.
+19.5 - Rendering/data scalability
+Goal: Prepare for larger task/project lists.
+Implement:
+* Virtualize long lists only when needed.
+* Server-side filtering/pagination.
+* Database indexes for frequent queries.
+Must use / learn: virtualization concept, DB indexing
+Done when: Performance remains acceptable with realistic larger datasets.
+19.6 - Accessibility/performance regression check
+Goal: Re-run quality checks after optimization.
+Implement:
+* Confirm optimization did not break keyboard behavior, loading states or correctness.
+Must use / learn: Lighthouse, automated tests
+Done when: Performance changes preserve functionality and accessibility.
+Milestone 20 - Security Hardening
+Objective: Perform a security pass after the feature set is complete.
+20.1 - Frontend secret audit
+Goal: Ensure no secrets are bundled.
+Implement:
+* Audit env vars.
+* Only expose public config.
+* No API keys/passwords in client code.
+Must use / learn: env conventions
+Done when: No private credential is present in frontend artifacts.
+20.2 - Input/output security
+Goal: Harden user-generated content.
+Implement:
+* Safe rendering of comments/descriptions.
+* Avoid dangerous HTML injection.
+* Validate/encode appropriately.
+Must use / learn: React escaping, security review
+Done when: User content cannot trivially inject executable markup.
+20.3 - Authorization audit
+Goal: Verify every sensitive backend operation.
+Implement:
+* Test IDOR-style access attempts.
+* Verify ownership and role permissions server-side.
+Must use / learn: Spring Security
+Done when: Unauthorized users cannot access or mutate another user's data.
+20.4 - Dependency/security scan
+Goal: Audit dependencies and containers.
+Implement:
+* Update vulnerable dependencies where safe.
+* Scan images/dependencies.
+Must use / learn: npm audit or chosen scanner, container scanner
+Done when: Known critical/high issues are addressed or documented.
+Milestone 21 - Docker, CI/CD & Environment Management
+Objective: Make the system reproducible and deployable.
+21.1 - Dockerize frontend/backend
+Goal: Create production-ready images.
+Implement:
+* Multi-stage builds where appropriate.
+* Non-root runtime where practical.
+* Health checks.
+Must use / learn: Docker
+Done when: Images build and run consistently.
+21.2 - Local compose environment
+Goal: Run app stack together.
+Implement:
+* React/frontend, Spring Boot, PostgreSQL and optional supporting services.
+* Environment configuration.
+Must use / learn: Docker Compose
+Done when: A new developer can start the stack with documented commands.
+21.3 - CI pipeline
+Goal: Automate quality checks.
+Implement:
+* Install.
+* Lint.
+* Typecheck.
+* Unit/component tests.
+* Backend tests.
+* Build.
+* E2E against test environment.
+Must use / learn: GitHub Actions or equivalent
+Done when: Pull requests receive automated quality feedback.
+21.4 - CD/deployment
+Goal: Automate production deployment.
+Implement:
+* Build immutable artifacts/images.
+* Environment-specific config.
+* Migration strategy.
+* Rollback plan.
+Must use / learn: CI/CD, deployment platform
+Done when: A tagged/approved change can be deployed predictably.
+Milestone 22 - Production Deployment & Operations
+Objective: Deploy and operate the finished product.
+22.1 - Deploy database
+Goal: Provision PostgreSQL.
+Implement:
+* Backups.
+* Migrations.
+* Connection security.
+* Least-privilege DB user.
+Must use / learn: PostgreSQL, migration tool
+Done when: Database is persistent and recoverable.
+22.2 - Deploy backend
+Goal: Deploy Spring Boot service.
+Implement:
+* HTTPS.
+* Environment variables.
+* Health endpoint.
+* CORS.
+* Logs.
+Must use / learn: Spring Boot, cloud runtime
+Done when: Backend is reachable securely and health can be checked.
+22.3 - Deploy frontend
+Goal: Deploy React production build.
+Implement:
+* Correct API base URL.
+* SPA fallback routing.
+* Caching headers where appropriate.
+Must use / learn: Vite production build
+Done when: All routes work directly in production.
+22.4 - Production smoke tests
+Goal: Verify critical workflows after deployment.
+Implement:
+* Login, project CRUD, task CRUD, Kanban update, comment, role restriction.
+Must use / learn: Playwright or smoke suite
+Done when: Production passes a repeatable smoke checklist.
+Milestone 23 - Final Product Hardening & Documentation
+Objective: Finish the application as a portfolio-quality engineering project.
+23.1 - UX polish
+Goal: Resolve rough edges discovered during real use.
+Implement:
+* Loading skeletons.
+* Toasts.
+* Confirmation dialogs.
+* Consistent empty/error states.
+* Form focus/error behavior.
+Must use / learn: Reusable components, UX consistency
+Done when: No major flow has unexplained blank/loading/error states.
+23.2 - Cross-browser/responsive verification
+Goal: Verify supported browsers and viewport sizes.
+Implement:
+* Desktop/mobile tests.
+* Keyboard-only pass.
+* Common Chromium/WebKit/Firefox checks as appropriate.
+Must use / learn: Playwright, responsive testing
+Done when: Critical workflows behave across supported environments.
+23.3 - Documentation
+Goal: Write complete README and architecture docs.
+Implement:
+* Features.
+* Architecture diagram.
+* Database schema.
+* API docs.
+* Local setup.
+* Environment variables.
+* Testing.
+* Deployment.
+* Troubleshooting.
+Must use / learn: Markdown, OpenAPI/Swagger if used
+Done when: Another developer can clone and run the project from documentation.
+23.4 - Portfolio presentation
+Goal: Prepare the project for interviews.
+Implement:
+* Screenshots/GIFs.
+* Architecture explanation.
+* Trade-offs.
+* Performance before/after.
+* Testing strategy.
+* Security decisions.
+Must use / learn: technical writing
+Done when: You can explain why every major technology and architectural decision exists.
+Final React Concept Coverage Checklist
+* JSX, components, props, children and component composition
+* Controlled/uncontrolled forms
+* useState and local UI state
+* useEffect, dependency arrays and cleanup
+* useContext/useContext
+* useRef and DOM/focus management
+* useMemo and derived state
+* useCallback and stable callbacks
+* useReducer and reducer-driven state transitions
+* Custom hooks
+* React.memo
+* lazy and Suspense
+* Error boundaries
+* Conditional rendering, lists and keys
+* Event handling
+* React Router, nested routes, params, navigation and URL search params
+* Protected routes and authorization-aware UI
+* Redux Toolkit: store, slices, actions, reducers, selectors, typed hooks
+* TanStack Query: queries, mutations, cache, invalidation, optimistic updates and prefetching
+* React Hook Form and Zod
+* Loading, error, empty and optimistic UI states
+* Accessibility, keyboard interaction and focus management
+* Performance profiling, bundle/code splitting and render optimization
+* Testing with unit/component/integration/E2E layers
+* TypeScript types, generics, API contracts and safe state modeling
+* Security: authentication, authorization, validation, XSS/IDOR considerations, secrets and CORS
+* Real-time updates and connection lifecycle
+* Production deployment, CI/CD, Docker, observability and documentation
+Definition of Done - Entire Project
+* A user can register/login, access only authorized areas, and log out.
+* Users can create/manage projects, teams and tasks.
+* Tasks can be filtered, searched, paginated and moved through the Kanban workflow.
+* Comments, activity and notifications work correctly.
+* Frontend state has a deliberate ownership model: local state vs Context vs Redux vs server cache.
+* Backend enforces validation, authentication and authorization independently of the UI.
+* Critical flows have unit/component/integration/E2E coverage.
+* The app has been profiled and optimized after functionality was complete.
+* Responsive and accessible behavior has been verified.
+* Security and dependency reviews have been performed.
+* The complete stack can be run from documented setup instructions and deployed through CI/CD.
+* Production smoke tests pass and rollback/recovery considerations are documented.
+Suggested Build Sequence
+Do not build all milestones simultaneously. Follow this dependency chain:
+0 Setup → 1 Shell/Routing → 2 Auth UI → 3 Dashboard → 4 Projects → 5 Tasks → 6 Kanban → 7 Collaboration → 8 Teams/Permissions → 9 Redux → 10 Spring Boot → 11 Security → 12 API/Query → 13 URL/Search → 14 Forms → 15 Real-time → 16 UX/Accessibility → 17 Resilience → 18 Testing → 19 Performance → 20 Security Hardening → 21 CI/CD → 22 Deployment → 23 Final Hardening.
+Important learning rule: when a task says a value belongs in useState, Redux, Context, or TanStack Query, follow that requirement deliberately. After the first implementation works, refactor only when a later milestone explicitly introduces a better abstraction. This makes the evolution of the architecture visible and educational.
