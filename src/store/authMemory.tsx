@@ -3,15 +3,17 @@ import { createSlice } from "@reduxjs/toolkit";
 const authMemorySlice = createSlice({
     name: "authMemory",
     initialState: {
-        isAuthenticated: false,
-        permissions: [],
+        isAuthenticated: true,
+        permissions: [] as string[],
     },
     reducers:{
         login: (state) => {
             state.isAuthenticated = true;
+            state.permissions = ["read", "write", "delete"];
         },
         logout: (state) => {
             state.isAuthenticated = false;
+            state.permissions = [];
         }
     }
 })

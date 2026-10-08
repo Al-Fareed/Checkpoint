@@ -15,6 +15,8 @@ import Team from "./pages/Team";
 import Navbar from "./layouts/Navbar";
 import Sidebar from "./layouts/SideBar";
 import Shell from "./layouts/Shell";
+import Login from "./pages/Login";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function AppLayout() {
   return (
@@ -31,21 +33,25 @@ function AppLayout() {
 function App() {
   return (
     <Routes>
-      <Route element={<AppLayout />}>
-        <Route index element={<Navigate to="/dashboard" replace />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="projects" element={<Projects />} />
-        <Route path="tasks" element={<Tasks />} />
-        <Route path="tasks/:taskId" element={<Tasks />} />
-        <Route path="kanban" element={<Kanban />} />
-        <Route path="calendar" element={<Calendar />} />
-        <Route path="team" element={<Team />} />
-        <Route path="reports" element={<Reports />} />
-        <Route path="checkpoints" element={<Checkpoints />} />
-        <Route path="notifications" element={<Notifications />} />
-        <Route path="profile" element={<Profile />} />
-        <Route path="settings" element={<Settings />} />
-        <Route path="*" element={<NotFound />} />
+      <Route path="/login" element={<Login />} />
+
+      <Route element={<ProtectedRoute />}>
+        <Route element={<AppLayout />}>
+          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="projects" element={<Projects />} />
+          <Route path="tasks" element={<Tasks />} />
+          <Route path="tasks/:taskId" element={<Tasks />} />
+          <Route path="kanban" element={<Kanban />} />
+          <Route path="calendar" element={<Calendar />} />
+          <Route path="team" element={<Team />} />
+          <Route path="reports" element={<Reports />} />
+          <Route path="checkpoints" element={<Checkpoints />} />
+          <Route path="notifications" element={<Notifications />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
       </Route>
     </Routes>
   );
