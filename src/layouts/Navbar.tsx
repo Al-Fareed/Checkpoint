@@ -2,16 +2,18 @@ import {
   CircleUserRound,
   EllipsisVertical,
   Flag,
+  Plus,
   Search,
 } from 'lucide-react'
+import { Link } from 'react-router'
 
 const Navbar = () => {
   return (
-    <nav className="border-b border-slate-800 bg-slate-900 text-white ">
+    <nav className="shrink-0 border-b border-slate-800 bg-slate-900 text-white">
       <div className="mx-auto flex h-16 max-w-screen-3xl items-center justify-between px-4 sm:px-6 lg:px-3">
 
-        <a
-          href="/"
+        <Link
+          to="/dashboard"
           className="flex items-center gap-2.5"
         >
           <span className="flex size-9 items-center justify-center rounded-xl bg-violet-600 text-white">
@@ -21,7 +23,7 @@ const Navbar = () => {
           <span className="text-lg font-semibold tracking-tight">
             Checkpoint
           </span>
-        </a>
+        </Link>
 
         <div className="absolute left-1/2 hidden w-[min(42vw,36rem)] -translate-x-1/2 sm:block">
           <Search
@@ -41,11 +43,19 @@ const Navbar = () => {
         <div className="ml-auto flex items-center gap-1">
           <button
             type="button"
+            aria-label="Notifications"
+            className="flex p-2 text-sm bg-blue-500 items-center justify-center rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
+          >
+            <Plus size={21} />New
+          </button>
+          <button
+            type="button"
             aria-label="User profile"
             className="flex size-10 items-center justify-center rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500"
           >
             <CircleUserRound size={22} strokeWidth={1.8} />
           </button>
+
 
           <button
             type="button"
