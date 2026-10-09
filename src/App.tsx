@@ -16,7 +16,9 @@ import Navbar from "./layouts/Navbar";
 import Sidebar from "./layouts/SideBar";
 import Shell from "./layouts/Shell";
 import Login from "./pages/Login";
+import GuestRoute from "./routes/GuestRoute";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import SignUp from "./pages/SignUp";
 
 function AppLayout() {
   return (
@@ -33,7 +35,11 @@ function AppLayout() {
 function App() {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
+
+      <Route element={<GuestRoute />}>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+      </Route>
 
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
